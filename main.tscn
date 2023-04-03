@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://byae6s4sk4jmd"]
+
+[ext_resource type="PackedScene" uid="uid://dqi1cevub4120" path="res://Player/player.tscn" id="1_fbwil"]
+[ext_resource type="PackedScene" uid="uid://bul4g4n0avduy" path="res://tiles.tscn" id="2_unkub"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_fbwil")]
+position = Vector2(108, 58)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(-4, 1)
+zoom = Vector2(2, 2)
+
+[node name="TileMap" parent="." instance=ExtResource("2_unkub")]
+layer_0/tile_data = PackedInt32Array(393216, 0, 0, 393217, 65536, 0, 393218, 65536, 0, 393219, 65536, 0, 393220, 65536, 0, 393221, 65536, 0, 393222, 65536, 0, 393223, 65536, 0, 393224, 65536, 0, 393225, 65536, 0, 393226, 65536, 0, 393227, 65536, 0, 393228, 65536, 0, 393229, 65536, 0, 393230, 65536, 0, 393231, 65536, 0, 393232, 65536, 0, 393233, 65536, 0, 393234, 65536, 0, 393235, 65536, 0, 393236, 65536, 0, 393237, 65536, 0, 393238, 65536, 0, 393239, 65536, 0, 393240, 65536, 0, 393241, 65536, 0, 393242, 65536, 0, 393243, 65536, 0, 393244, 65536, 0, 393245, 65536, 0, 393246, 65536, 0, 393247, 65536, 0, 393248, 65536, 0, 393249, 65536, 0, 393250, 65536, 0, 393251, 65536, 0, 393252, 65536, 0, 393253, 65536, 0, 393254, 65536, 0, 393255, 65536, 0, 393256, 131072, 0)

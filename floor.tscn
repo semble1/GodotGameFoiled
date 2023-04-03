@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://kemdshk4v6iw"]
+
+[ext_resource type="Texture2D" uid="uid://ba1656fsigfjg" path="res://Floor/Terrain (16x16).png" id="1_tw3yg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3s2d7"]
+size = Vector2(45, 45)
+
+[node name="StaticBody2D" type="StaticBody2D"]
+position = Vector2(179, 97)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_tw3yg")
+region_enabled = true
+region_rect = Rect2(97.6054, -0.095993, 45.0789, 46.4449)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_3s2d7")
