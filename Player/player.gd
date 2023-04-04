@@ -12,21 +12,30 @@ var last_direction = 0
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
-		state = "Jump"
-	elif Input.get_axis("ui_left", "ui_right") != 0:
+		if state != "Attack" and state != "JumpAttack":
+			state = "Jump"
+	elif Input.get_axis("ui_left", "ui_right") != 0 and state != "Attack":
 		state = "Run"
-	else:
+	elif state != "Attack":
 		state = "Idle"
 
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-
-	var direction = Input.get_axis("ui_left", "ui_right")
-	if direction:
-		velocity.x = direction * SPEED
-		last_direction = direction
-	else:
-		velocity.x = move_toward(velocity.x, 0, DECELERATION * delta)
+		
+	if Input.is_action_just_pressed("ui_attack"):
+		if state == "Jump":
+			state = "JumpAttack"
+		elif state != "Attack":
+			state = "Attack"
+			velocity.x = 0
+	
+	if state != "Attack" and state != "JumpAttack":
+		var direction = Input.get_axis("ui_left", "ui_right")
+		if direction:
+			velocity.x = direction * SPEED
+			last_direction = direction
+		else:
+			velocity.x = move_toward(velocity.x, 0, DECELERATION * delta)
 
 	up_direction = Vector2.UP
 	move_and_slide()
@@ -43,9 +52,19 @@ func update_animation():
 		"Jump":
 			if animated_sprite.animation != "Jump":
 				animated_sprite.play("Jump")
+		"Attack":
+			if animated_sprite.animation != "Attack1":
+				animated_sprite.play("Attack1")
+		"JumpAttack":
+			if animated_sprite.animation != "JumpAttack":
+				animated_sprite.play("JumpAttack")
 	if velocity.x > 0:
 		animated_sprite.flip_h = false
 		animated_sprite.offset.x = 0
 	elif velocity.x < 0:
 		animated_sprite.flip_h = true
 		animated_sprite.offset.x = -25
+		
+func _on_animated_sprite_2d_animation_finished():
+	if animated_sprite.animation == "Attack1" or animated_sprite.animation == "JumpAttack":
+		state = "Idle"

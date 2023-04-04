@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=3 uid="uid://dqi1cevub4120"]
+[gd_scene load_steps=96 format=3 uid="uid://dqi1cevub4120"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_vrifx"]
 [ext_resource type="Texture2D" uid="uid://pfma3turi2ns" path="res://RedHood/idle.png" id="2_4x23o"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cv1jlurp5uy5s" path="res://RedHood/jump.png" id="3_u7lro"]
 [ext_resource type="Texture2D" uid="uid://c2vg58u8kpbdl" path="res://RedHood/run.png" id="3_xfvel"]
 [ext_resource type="Texture2D" uid="uid://7iqyabwmmyy2" path="res://RedHood/turn.png" id="4_ibfep"]
+[ext_resource type="Texture2D" uid="uid://cigc5grv7bc3r" path="res://RedHood/jumpattack.png" id="6_16c47"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_an7d5"]
 atlas = ExtResource("2_jwim8")
@@ -182,6 +183,58 @@ region = Rect2(1360, 0, 80, 80)
 [sub_resource type="AtlasTexture" id="AtlasTexture_3dwb6"]
 atlas = ExtResource("3_u7lro")
 region = Rect2(1440, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tipux"]
+atlas = ExtResource("6_16c47")
+region = Rect2(0, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4lupr"]
+atlas = ExtResource("6_16c47")
+region = Rect2(211, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vvv2u"]
+atlas = ExtResource("6_16c47")
+region = Rect2(422, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0pv1e"]
+atlas = ExtResource("6_16c47")
+region = Rect2(633, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bk7q2"]
+atlas = ExtResource("6_16c47")
+region = Rect2(844, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tfolk"]
+atlas = ExtResource("6_16c47")
+region = Rect2(1055, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_63afd"]
+atlas = ExtResource("6_16c47")
+region = Rect2(1266, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4pg2d"]
+atlas = ExtResource("6_16c47")
+region = Rect2(1477, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovc0u"]
+atlas = ExtResource("6_16c47")
+region = Rect2(1688, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rn8lb"]
+atlas = ExtResource("6_16c47")
+region = Rect2(1899, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ntttk"]
+atlas = ExtResource("6_16c47")
+region = Rect2(2110, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fllc6"]
+atlas = ExtResource("6_16c47")
+region = Rect2(2321, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2q1ur"]
+atlas = ExtResource("6_16c47")
+region = Rect2(2532, 0, 211, 133)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ruq23"]
 atlas = ExtResource("3_xfvel")
@@ -450,6 +503,50 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_tipux")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4lupr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vvv2u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0pv1e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bk7q2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tfolk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_63afd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4pg2d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovc0u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rn8lb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ntttk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fllc6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2q1ur")
+}],
+"loop": false,
+"name": &"JumpAttack",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_ruq23")
 }, {
 "duration": 1.0,
@@ -554,8 +651,8 @@ script = ExtResource("1_vrifx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_dfkly")
-animation = &"Attack1"
-frame = 6
+animation = &"JumpAttack"
+frame = 12
 frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
