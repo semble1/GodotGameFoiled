@@ -1,4 +1,4 @@
-[gd_scene load_steps=96 format=3 uid="uid://dqi1cevub4120"]
+[gd_scene load_steps=101 format=3 uid="uid://dqi1cevub4120"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_vrifx"]
 [ext_resource type="Texture2D" uid="uid://pfma3turi2ns" path="res://RedHood/idle.png" id="2_4x23o"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://c2vg58u8kpbdl" path="res://RedHood/run.png" id="3_xfvel"]
 [ext_resource type="Texture2D" uid="uid://7iqyabwmmyy2" path="res://RedHood/turn.png" id="4_ibfep"]
 [ext_resource type="Texture2D" uid="uid://cigc5grv7bc3r" path="res://RedHood/jumpattack.png" id="6_16c47"]
+[ext_resource type="Texture2D" uid="uid://bl7s6vnldix0t" path="res://RedHood/slide.png" id="7_qi108"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_an7d5"]
 atlas = ExtResource("2_jwim8")
@@ -332,6 +333,22 @@ region = Rect2(1760, 0, 80, 80)
 atlas = ExtResource("3_xfvel")
 region = Rect2(1840, 0, 80, 80)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_fhehm"]
+atlas = ExtResource("7_qi108")
+region = Rect2(0, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ynn1l"]
+atlas = ExtResource("7_qi108")
+region = Rect2(211, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_onqhs"]
+atlas = ExtResource("7_qi108")
+region = Rect2(422, 0, 211, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u3w1f"]
+atlas = ExtResource("7_qi108")
+region = Rect2(633, 0, 211, 133)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_axhi4"]
 atlas = ExtResource("4_ibfep")
 region = Rect2(15, 0, 77, 64)
@@ -499,7 +516,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Jump",
-"speed": 19.0
+"speed": 18.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -624,6 +641,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_fhehm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ynn1l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_onqhs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u3w1f")
+}],
+"loop": true,
+"name": &"Slide",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_axhi4")
 }, {
 "duration": 1.0,
@@ -651,9 +685,8 @@ script = ExtResource("1_vrifx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_dfkly")
-animation = &"JumpAttack"
-frame = 12
-frame_progress = 1.0
+animation = &"Slide"
+frame_progress = 0.492568
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-11.5, 5)
