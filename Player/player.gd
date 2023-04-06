@@ -10,6 +10,8 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var animated_sprite = get_node("AnimatedSprite2D")
 var state = "Idle"
 var last_direction = 0
+var attack_state = "NotAttacking"
+var can_chain_attack = false
 
 func _physics_process(delta):
 	if not is_on_floor():
@@ -30,9 +32,15 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("ui_attack"):
 		if state == "Jump":
 			state = "JumpAttack"
-		elif state != "Attack":
+		elif state != "Attack" and state != "JumpAttack":
 			state = "Attack"
+			attack_state = "Attack1"
 			velocity.x = 0
+			if can_chain_attack:
+				if attack_state == "Attack1":
+					attack_state = "Attack2"
+				else:
+					attack_state = "Attack1"
 	
 	if state != "Attack" and state != "JumpAttack":
 		var direction = Input.get_axis("ui_left", "ui_right")
@@ -64,8 +72,13 @@ func update_animation():
 			if animated_sprite.animation != "Jump":
 				animated_sprite.play("Jump")
 		"Attack":
-			if animated_sprite.animation != "Attack1":
-				animated_sprite.play("Attack1")
+			match attack_state:
+				"Attack1":
+					if animated_sprite.animation != "Attack1":
+						animated_sprite.play("Attack1")
+				"Attack2":
+					if animated_sprite.animation != "Attack2":
+						animated_sprite.play("Attack2")
 		"JumpAttack":
 			if animated_sprite.animation != "JumpAttack":
 				animated_sprite.play("JumpAttack")
@@ -80,5 +93,15 @@ func update_animation():
 		animated_sprite.offset.x = -25
 		
 func _on_animated_sprite_2d_animation_finished():
-	if animated_sprite.animation == "Attack1" or animated_sprite.animation == "JumpAttack" or animated_sprite.animation == "Slide":
+	if animated_sprite.animation == "Attack1":
+		can_chain_attack = true
+		$AttackChainTimer.start()
 		state = "Idle"
+	elif animated_sprite.animation == "Attack2":
+		can_chain_attack = false
+		state = "Idle"
+	elif animated_sprite.animation == "JumpAttack" or animated_sprite.animation == "Slide":
+		state = "Idle"
+
+func _on_attack_chain_timer_timeout():
+	can_chain_attack = false

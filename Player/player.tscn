@@ -1,4 +1,4 @@
-[gd_scene load_steps=101 format=3 uid="uid://dqi1cevub4120"]
+[gd_scene load_steps=105 format=3 uid="uid://dqi1cevub4120"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_vrifx"]
 [ext_resource type="Texture2D" uid="uid://pfma3turi2ns" path="res://RedHood/idle.png" id="2_4x23o"]
@@ -33,9 +33,25 @@ region = Rect2(325, 0, 75, 80)
 atlas = ExtResource("2_jwim8")
 region = Rect2(405, 0, 75, 80)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hl2is"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_in8bo"]
 atlas = ExtResource("2_jwim8")
-region = Rect2(485, 0, 75, 80)
+region = Rect2(563, 0, 79, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7xbsv"]
+atlas = ExtResource("2_jwim8")
+region = Rect2(642, 0, 79, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sec25"]
+atlas = ExtResource("2_jwim8")
+region = Rect2(721, 0, 79, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c24pb"]
+atlas = ExtResource("2_jwim8")
+region = Rect2(800, 0, 79, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i233o"]
+atlas = ExtResource("2_jwim8")
+region = Rect2(879, 0, 79, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_en18n"]
 atlas = ExtResource("2_4x23o")
@@ -389,12 +405,29 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_sx7ox")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hl2is")
 }],
 "loop": false,
 "name": &"Attack1",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_in8bo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7xbsv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sec25")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c24pb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i233o")
+}],
+"loop": false,
+"name": &"Attack2",
 "speed": 14.0
 }, {
 "frames": [{
@@ -685,11 +718,15 @@ script = ExtResource("1_vrifx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_dfkly")
-animation = &"Slide"
-frame_progress = 0.492568
+animation = &"Attack1"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-11.5, 5)
 shape = SubResource("RectangleShape2D_feww4")
 
+[node name="AttackChainTimer" type="Timer" parent="."]
+wait_time = 0.15
+one_shot = true
+
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="timeout" from="AttackChainTimer" to="." method="_on_attack_chain_timer_timeout"]
