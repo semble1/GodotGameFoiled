@@ -34,13 +34,16 @@ func _physics_process(delta):
 			state = "JumpAttack"
 		elif state != "Attack" and state != "JumpAttack":
 			state = "Attack"
-			attack_state = "Attack1"
 			velocity.x = 0
 			if can_chain_attack:
 				if attack_state == "Attack1":
 					attack_state = "Attack2"
+				elif attack_state == "Attack2":
+					attack_state = "Attack3"
 				else:
 					attack_state = "Attack1"
+			else:
+				attack_state = "Attack1"
 	
 	if state != "Attack" and state != "JumpAttack":
 		var direction = Input.get_axis("ui_left", "ui_right")
@@ -79,6 +82,9 @@ func update_animation():
 				"Attack2":
 					if animated_sprite.animation != "Attack2":
 						animated_sprite.play("Attack2")
+				"Attack3":
+					if animated_sprite.animation != "Attack3":
+						animated_sprite.play("Attack3")
 		"JumpAttack":
 			if animated_sprite.animation != "JumpAttack":
 				animated_sprite.play("JumpAttack")
@@ -93,14 +99,15 @@ func update_animation():
 		animated_sprite.offset.x = -25
 		
 func _on_animated_sprite_2d_animation_finished():
-	if animated_sprite.animation == "Attack1":
+	if animated_sprite.animation == "Attack1" or animated_sprite.animation == "Attack2":
 		can_chain_attack = true
 		$AttackChainTimer.start()
 		state = "Idle"
-	elif animated_sprite.animation == "Attack2":
+	elif animated_sprite.animation == "Attack3":
 		can_chain_attack = false
 		state = "Idle"
 	elif animated_sprite.animation == "JumpAttack" or animated_sprite.animation == "Slide":
+		can_chain_attack = false
 		state = "Idle"
 
 func _on_attack_chain_timer_timeout():
