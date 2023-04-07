@@ -14,11 +14,16 @@ var attack_state = "NotAttacking"
 var can_chain_attack = false
 
 func _physics_process(delta):
+	var direction = Input.get_axis("ui_left", "ui_right")
 	if not is_on_floor():
 		velocity.y += gravity * delta
 		if state != "Attack" and state != "JumpAttack":
-			state = "Jump"
-	elif Input.get_axis("ui_left", "ui_right") != 0 and state != "Attack":
+			if is_on_wall() and velocity.y > 0:
+				velocity.y = velocity.y/1.5
+				state = "WallSlide"
+			else:
+				state = "Jump"
+	elif direction != 0 and state != "Attack":
 		if Input.is_action_pressed("ui_down"):
 			state = "Slide"
 		else:
@@ -46,7 +51,6 @@ func _physics_process(delta):
 				attack_state = "Attack1"
 	
 	if state != "Attack" and state != "JumpAttack":
-		var direction = Input.get_axis("ui_left", "ui_right")
 		if direction:
 			if state == "Slide":
 				velocity.x = direction * SPEED * SLIDE_SPEED_MULTIPLIER
@@ -91,6 +95,9 @@ func update_animation():
 		"Slide":
 			if animated_sprite.animation != "Slide":
 				animated_sprite.play("Slide")
+		"WallSlide":
+			if animated_sprite.animation != "WallSlide":
+				animated_sprite.play("WallSlide")
 	if velocity.x > 0:
 		animated_sprite.flip_h = false
 		animated_sprite.offset.x = 0
@@ -100,8 +107,7 @@ func update_animation():
 		
 func _on_animated_sprite_2d_animation_finished():
 	if animated_sprite.animation == "Attack1" or animated_sprite.animation == "Attack2":
-		can_chain_attack = true
-		$AttackChainTimer.start()
+		$AttackWaitTimer.start()
 		state = "Idle"
 	elif animated_sprite.animation == "Attack3":
 		can_chain_attack = false
@@ -112,3 +118,7 @@ func _on_animated_sprite_2d_animation_finished():
 
 func _on_attack_chain_timer_timeout():
 	can_chain_attack = false
+
+func _on_attack_wait_timer_timeout():
+	can_chain_attack = true
+	$AttackChainTimer.start()

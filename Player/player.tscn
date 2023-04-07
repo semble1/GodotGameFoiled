@@ -1,4 +1,4 @@
-[gd_scene load_steps=119 format=3 uid="uid://dqi1cevub4120"]
+[gd_scene load_steps=124 format=3 uid="uid://dqi1cevub4120"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_vrifx"]
 [ext_resource type="Texture2D" uid="uid://pfma3turi2ns" path="res://RedHood/idle.png" id="2_4x23o"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://7iqyabwmmyy2" path="res://RedHood/turn.png" id="4_ibfep"]
 [ext_resource type="Texture2D" uid="uid://cigc5grv7bc3r" path="res://RedHood/jumpattack.png" id="6_16c47"]
 [ext_resource type="Texture2D" uid="uid://bl7s6vnldix0t" path="res://RedHood/slide.png" id="7_qi108"]
+[ext_resource type="Texture2D" uid="uid://cenq14cl2oj0m" path="res://RedHood/wallslide.png" id="9_ly5g3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_an7d5"]
 atlas = ExtResource("2_jwim8")
@@ -441,6 +442,22 @@ region = Rect2(246, 0, 77, 64)
 atlas = ExtResource("4_ibfep")
 region = Rect2(323, 0, 77, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_tvcly"]
+atlas = ExtResource("9_ly5g3")
+region = Rect2(0, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jhdya"]
+atlas = ExtResource("9_ly5g3")
+region = Rect2(80, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s3b0a"]
+atlas = ExtResource("9_ly5g3")
+region = Rect2(160, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1jflv"]
+atlas = ExtResource("9_ly5g3")
+region = Rect2(240, 0, 80, 64)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_dfkly"]
 animations = [{
 "frames": [{
@@ -790,7 +807,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Slide",
-"speed": 14.0
+"speed": 18.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -810,7 +827,24 @@ animations = [{
 }],
 "loop": false,
 "name": &"Turn",
-"speed": 20.0
+"speed": 18.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tvcly")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jhdya")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s3b0a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1jflv")
+}],
+"loop": true,
+"name": &"WallSlide",
+"speed": 18.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_feww4"]
@@ -821,9 +855,9 @@ script = ExtResource("1_vrifx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_dfkly")
-animation = &"Attack3"
-frame = 13
-frame_progress = 1.0
+animation = &"WallSlide"
+frame = 1
+frame_progress = 0.53765
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-11.5, 5)
@@ -833,5 +867,10 @@ shape = SubResource("RectangleShape2D_feww4")
 wait_time = 0.15
 one_shot = true
 
+[node name="AttackWaitTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="timeout" from="AttackChainTimer" to="." method="_on_attack_chain_timer_timeout"]
+[connection signal="timeout" from="AttackWaitTimer" to="." method="_on_attack_wait_timer_timeout"]
