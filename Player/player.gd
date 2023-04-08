@@ -4,7 +4,7 @@ const SPEED = 200.0
 const JUMP_VELOCITY = -400.0
 const DECELERATION = 2000.0
 const SLIDE_DECELERATION = 4000.0
-const SLIDE_SPEED_MULTIPLIER = 2
+const SLIDE_SPEED_MULTIPLIER = 2.5
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 @onready var animated_sprite = get_node("AnimatedSprite2D")
