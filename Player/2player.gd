@@ -14,7 +14,7 @@ var attack_state = "NotAttacking"
 var can_chain_attack = false
 
 func _physics_process(delta):
-	var direction = Input.get_axis("ui_left", "ui_right")
+	var direction = Input.get_axis("2ui_left", "2ui_right")
 	if not is_on_floor():
 		velocity.y += gravity * delta
 		if state != "Attack" and state != "JumpAttack":
@@ -24,17 +24,17 @@ func _physics_process(delta):
 			else:
 				state = "Jump"
 	elif direction != 0 and state != "Attack":
-		if Input.is_action_pressed("ui_down"):
+		if Input.is_action_pressed("2ui_down"):
 			state = "Slide"
 		else:
 			state = "Run"
 	elif state != "Attack":
 		state = "Idle"
 
-	if Input.is_action_just_pressed("ui_up") and is_on_floor():
+	if Input.is_action_just_pressed("2ui_up") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 		
-	if Input.is_action_just_pressed("ui_attack"):
+	if Input.is_action_just_pressed("2ui_attack"):
 		if state == "Jump":
 			state = "JumpAttack"
 		elif state != "Attack" and state != "JumpAttack":
