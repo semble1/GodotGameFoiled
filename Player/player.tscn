@@ -1,4 +1,4 @@
-[gd_scene load_steps=124 format=3 uid="uid://dqi1cevub4120"]
+[gd_scene load_steps=128 format=3 uid="uid://dqi1cevub4120"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_vrifx"]
 [ext_resource type="Texture2D" uid="uid://pfma3turi2ns" path="res://RedHood/idle.png" id="2_4x23o"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://cigc5grv7bc3r" path="res://RedHood/jumpattack.png" id="6_16c47"]
 [ext_resource type="Texture2D" uid="uid://bl7s6vnldix0t" path="res://RedHood/slide.png" id="7_qi108"]
 [ext_resource type="Texture2D" uid="uid://cenq14cl2oj0m" path="res://RedHood/wallslide.png" id="9_ly5g3"]
+[ext_resource type="PackedScene" uid="uid://6qewemgqtv6k" path="res://hitbox.tscn" id="10_1abks"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_an7d5"]
 atlas = ExtResource("2_jwim8")
@@ -850,14 +851,49 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_feww4"]
 size = Vector2(13, 26)
 
+[sub_resource type="Animation" id="Animation_7qqq0"]
+resource_name = "Idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 17]
+}
+
+[sub_resource type="Animation" id="Animation_lx7n0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2lhme"]
+_data = {
+"Idle": SubResource("Animation_7qqq0"),
+"RESET": SubResource("Animation_lx7n0")
+}
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_vrifx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_dfkly")
-animation = &"WallSlide"
-frame = 1
-frame_progress = 0.53765
+animation = &"Idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-11.5, 5)
@@ -870,6 +906,13 @@ one_shot = true
 [node name="AttackWaitTimer" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
+
+[node name="hitbox" parent="." instance=ExtResource("10_1abks")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_2lhme")
+}
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="timeout" from="AttackChainTimer" to="." method="_on_attack_chain_timer_timeout"]
