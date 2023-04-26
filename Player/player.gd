@@ -9,10 +9,19 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 @onready var animated_sprite = get_node("AnimatedSprite2D")
 @onready var animation_player = get_node("AnimationPlayer")
+@onready var hurtbox = $AnimatedSprite2D/hurtbox
+@onready var hitbox = $AnimatedSprite2D/hitbox
+
 var state = "Idle"
 var last_direction = 0
 var attack_state = "NotAttacking"
 var can_chain_attack = false
+
+func _ready():
+	hurtbox.character_hit.connect(self.on_character_hit)
+
+func on_character_hit(damage: int):
+	print(damage)
 
 func _physics_process(delta):
 	var direction = Input.get_axis("ui_left", "ui_right")
@@ -100,11 +109,15 @@ func update_animation():
 			if animation_player.current_animation != "WallSlide":
 				animation_player.play("WallSlide")
 	if velocity.x > 0:
-		animated_sprite.flip_h = false
+		animated_sprite.scale.x = 1
 		animated_sprite.offset.x = 0
+		hitbox.position.x = 0
+		hurtbox.position.x = 0
 	elif velocity.x < 0:
-		animated_sprite.flip_h = true
-		animated_sprite.offset.x = -25
+		animated_sprite.scale.x = -1
+		animated_sprite.offset.x = 23
+		hitbox.position.x = 23
+		hurtbox.position.x = 23
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "Attack1" or anim_name == "Attack2":
@@ -123,3 +136,4 @@ func _on_attack_chain_timer_timeout():
 func _on_attack_wait_timer_timeout():
 	can_chain_attack = true
 	$AttackChainTimer.start()
+

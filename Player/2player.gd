@@ -8,10 +8,20 @@ const SLIDE_SPEED_MULTIPLIER = 2.5
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 @onready var animated_sprite = get_node("AnimatedSprite2D")
+@onready var animation_player = get_node("AnimationPlayer")
+@onready var hurtbox = $AnimatedSprite2D/hurtbox
+@onready var hitbox = $AnimatedSprite2D/hitbox
+
 var state = "Idle"
 var last_direction = 0
 var attack_state = "NotAttacking"
 var can_chain_attack = false
+
+func _ready():
+	hurtbox.character_hit.connect(self.on_character_hit)
+
+func on_character_hit(damage: int):
+	print(damage)
 
 func _physics_process(delta):
 	var direction = Input.get_axis("2ui_left", "2ui_right")
@@ -70,49 +80,53 @@ func _physics_process(delta):
 func update_animation():
 	match state:
 		"Idle":
-			if animated_sprite.animation != "Idle":
-				animated_sprite.play("Idle")
+			if animation_player.current_animation != "Idle":
+				animation_player.play("Idle")
 		"Run":
-			if animated_sprite.animation != "Run":
-				animated_sprite.play("Run")
+			if animation_player.current_animation != "Run":
+				animation_player.play("Run")
 		"Jump":
-			if animated_sprite.animation != "Jump":
-				animated_sprite.play("Jump")
+			if animation_player.current_animation != "Jump":
+				animation_player.play("Jump")
 		"Attack":
 			match attack_state:
 				"Attack1":
-					if animated_sprite.animation != "Attack1":
-						animated_sprite.play("Attack1")
+					if animation_player.current_animation != "Attack1":
+						animation_player.play("Attack1")
 				"Attack2":
-					if animated_sprite.animation != "Attack2":
-						animated_sprite.play("Attack2")
+					if animation_player.current_animation != "Attack2":
+						animation_player.play("Attack2")
 				"Attack3":
-					if animated_sprite.animation != "Attack3":
-						animated_sprite.play("Attack3")
+					if animation_player.current_animation != "Attack3":
+						animation_player.play("Attack3")
 		"JumpAttack":
-			if animated_sprite.animation != "JumpAttack":
-				animated_sprite.play("JumpAttack")
+			if animation_player.current_animation != "JumpAttack":
+				animation_player.play("JumpAttack")
 		"Slide":
-			if animated_sprite.animation != "Slide":
-				animated_sprite.play("Slide")
+			if animation_player.current_animation != "Slide":
+				animation_player.play("Slide")
 		"WallSlide":
-			if animated_sprite.animation != "WallSlide":
-				animated_sprite.play("WallSlide")
+			if animation_player.current_animation != "WallSlide":
+				animation_player.play("WallSlide")
 	if velocity.x > 0:
-		animated_sprite.flip_h = false
+		animated_sprite.scale.x = 1
 		animated_sprite.offset.x = 0
+		hitbox.position.x = 0
+		hurtbox.position.x = 0
 	elif velocity.x < 0:
-		animated_sprite.flip_h = true
-		animated_sprite.offset.x = -25
-		
-func _on_animated_sprite_2d_animation_finished():
-	if animated_sprite.animation == "Attack1" or animated_sprite.animation == "Attack2":
+		animated_sprite.scale.x = -1
+		animated_sprite.offset.x = 23
+		hitbox.position.x = 23
+		hurtbox.position.x = 23
+
+func _on_animation_player_animation_finished(anim_name):
+	if anim_name == "Attack1" or anim_name == "Attack2":
 		$AttackWaitTimer.start()
 		state = "Idle"
-	elif animated_sprite.animation == "Attack3":
+	elif anim_name == "Attack3":
 		can_chain_attack = false
 		state = "Idle"
-	elif animated_sprite.animation == "JumpAttack" or animated_sprite.animation == "Slide":
+	elif anim_name == "JumpAttack" or anim_name == "Slide":
 		can_chain_attack = false
 		state = "Idle"
 
