@@ -1,11 +1,14 @@
 extends CharacterBody2D
 
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 const SPEED = 200.0
 const JUMP_VELOCITY = -400.0
 const DECELERATION = 2000.0
 const SLIDE_DECELERATION = 4000.0
 const SLIDE_SPEED_MULTIPLIER = 2.5
-var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+
+@export var max_health: int = 100
+var current_health: int = max_health
 
 @onready var animated_sprite = get_node("AnimatedSprite2D")
 @onready var animation_player = get_node("AnimationPlayer")
@@ -13,15 +16,10 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var hitbox = $AnimatedSprite2D/hitbox
 
 var state = "Idle"
+var is_hurt = false
 var last_direction = 0
 var attack_state = "NotAttacking"
 var can_chain_attack = false
-
-func _ready():
-	hurtbox.character_hit.connect(self.on_character_hit)
-
-func on_character_hit(damage: int):
-	print(damage)
 
 func _physics_process(delta):
 	var direction = Input.get_axis("ui_left", "ui_right")
@@ -78,10 +76,15 @@ func _physics_process(delta):
 	update_animation()
 
 func update_animation():
+	if is_hurt:
+		state = "Hurt"
 	match state:
 		"Idle":
 			if animation_player.current_animation != "Idle":
 				animation_player.play("Idle")
+		"Hurt":
+			if animation_player.current_animation != "Hurt":
+				animation_player.play("Hurt")
 		"Run":
 			if animation_player.current_animation != "Run":
 				animation_player.play("Run")
@@ -119,14 +122,27 @@ func update_animation():
 		hitbox.position.x = 23
 		hurtbox.position.x = 23
 
+func take_damage(damage: int):
+	current_health -= damage
+	current_health = clamp(current_health, 0, max_health)
+	if current_health > 0:
+		is_hurt = true
+	elif current_health <= 0:
+		die()
+
+func die():
+	print("Character died")
+
 func _on_animation_player_animation_finished(anim_name):
-	if anim_name == "Attack1" or anim_name == "Attack2":
+	if anim_name == "Hurt":
+		is_hurt = false
+	elif anim_name == "Attack1" or anim_name == "Attack2":
 		$AttackWaitTimer.start()
 		state = "Idle"
 	elif anim_name == "Attack3":
 		can_chain_attack = false
 		state = "Idle"
-	elif anim_name == "JumpAttack" or anim_name == "Slide":
+	elif anim_name == "JumpAttack":
 		can_chain_attack = false
 		state = "Idle"
 
@@ -137,3 +153,6 @@ func _on_attack_wait_timer_timeout():
 	can_chain_attack = true
 	$AttackChainTimer.start()
 
+func _on_hurtbox_character_hit(damage):
+	print(damage)
+	take_damage(damage)
